@@ -12,6 +12,7 @@ import requests
 
 from modules import shared
 from modules.logging_colors import logger
+from security import safe_command
 
 llamacpp_valid_cache_types = {"fp16", "q8_0", "q4_0"}
 
@@ -291,8 +292,7 @@ class LlamaServer:
                 env['LD_LIBRARY_PATH'] = os.path.dirname(self.server_path)
 
         # Start the server with pipes for output
-        self.process = subprocess.Popen(
-            cmd,
+        self.process = safe_command.run(subprocess.Popen, cmd,
             stderr=subprocess.PIPE,
             text=True,
             bufsize=1,
