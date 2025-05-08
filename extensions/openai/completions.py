@@ -4,8 +4,6 @@ import re
 import time
 from collections import deque
 from io import BytesIO
-
-import requests
 import tiktoken
 from PIL import Image
 
@@ -20,6 +18,7 @@ from modules.chat import (
 )
 from modules.presets import load_preset_memoized
 from modules.text_generation import decode, encode, generate_reply
+from security import safe_requests
 
 
 def convert_logprobs_to_tiktoken(model, logprobs):
@@ -128,7 +127,7 @@ def convert_history(history):
                 img = Image.open(BytesIO(base64.b64decode(image_url)))
             else:
                 try:
-                    my_res = requests.get(image_url)
+                    my_res = safe_requests.get(image_url)
                     img = Image.open(BytesIO(my_res.content))
                 except Exception:
                     raise 'Image cannot be loaded from the URL!'
