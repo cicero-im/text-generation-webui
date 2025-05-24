@@ -55,7 +55,7 @@ def generations(prompt: str, size: str, response_format: str, n: int):
     # TODO: support SD_WEBUI_AUTH username:password pair.
     sd_url = f"{os.environ.get('SD_WEBUI_URL', params.get('sd_webui_url', ''))}/sdapi/v1/txt2img"
 
-    response = requests.post(url=sd_url, json=payload)
+    response = requests.post(url=sd_url, json=payload, timeout=60)
     r = response.json()
     if response.status_code != 200 or 'images' not in r:
         print(r)

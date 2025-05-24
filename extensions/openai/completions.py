@@ -128,7 +128,7 @@ def convert_history(history):
                 img = Image.open(BytesIO(base64.b64decode(image_url)))
             else:
                 try:
-                    my_res = requests.get(image_url)
+                    my_res = requests.get(image_url, timeout=60)
                     img = Image.open(BytesIO(my_res.content))
                 except Exception:
                     raise 'Image cannot be loaded from the URL!'
