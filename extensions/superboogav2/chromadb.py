@@ -1,5 +1,4 @@
 import math
-import random
 import threading
 import torch
 import chromadb
@@ -11,6 +10,7 @@ from chromadb.utils import embedding_functions
 import extensions.superboogav2.parameters as parameters
 from modules.logging_colors import logger
 from modules.text_generation import decode, encode
+import secrets
 
 # Intercept calls to posthog
 posthog.capture = lambda *args, **kwargs: None
@@ -74,7 +74,7 @@ class Info:
 
 class ChromaCollector():
     def __init__(self):
-        name = "".join(random.choice("ab") for _ in range(10))
+        name = "".join(secrets.choice("ab") for _ in range(10))
 
         self.name = name
         self.embedder = embedding_functions.SentenceTransformerEmbeddingFunction(

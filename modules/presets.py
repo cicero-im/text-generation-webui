@@ -1,6 +1,5 @@
 import functools
 import pprint
-import random
 from pathlib import Path
 
 import yaml
@@ -8,6 +7,7 @@ import yaml
 from modules import shared
 from modules.loaders import loaders_samplers
 from modules.logging_colors import logger
+import secrets
 
 
 def default_preset():
@@ -136,8 +136,8 @@ def random_preset(state):
             choices = [x for x in choices if loader_contains(x)]
 
         if len(choices) > 0:
-            choice = random.choice(choices)
-            value = random.choice(params_and_values[cat][choice])
+            choice = secrets.choice(choices)
+            value = secrets.choice(params_and_values[cat][choice])
             if choice == 'dynamic_temperature':
                 generate_params['dynamic_temperature'] = True
                 generate_params['dynatemp_low'] = value[0]

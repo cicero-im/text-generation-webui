@@ -1,7 +1,6 @@
 import json
 import math
 import pprint
-import random
 
 import torch
 import transformers
@@ -14,6 +13,7 @@ from transformers.generation.logits_process import (
 from modules import shared
 from modules.logging_colors import logger
 from modules.torch_utils import get_device
+import secrets
 
 original_init = transformers.GenerationConfig.__init__
 original_get_logits_processor = transformers.GenerationMixin._get_logits_processor
@@ -257,7 +257,7 @@ class XTCLogitsWarper(LogitsProcessor):
         # the threshold, then with probability...", reversing the two conditions is logically
         # equivalent, and improves performance because processing can immediately be stopped
         # if the random check fails.
-        if random.random() >= self.probability:
+        if secrets.SystemRandom().random() >= self.probability:
             return scores
 
         sorted_logits, sorted_indices = torch.sort(scores, descending=True)

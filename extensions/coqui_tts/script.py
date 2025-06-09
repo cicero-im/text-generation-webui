@@ -1,7 +1,6 @@
 import html
 import json
 import os
-import random
 import time
 from pathlib import Path
 
@@ -13,6 +12,7 @@ from TTS.utils.synthesizer import Synthesizer
 from modules import chat, shared, ui_chat
 from modules.ui import create_refresh_button
 from modules.utils import gradio
+import secrets
 
 os.environ["COQUI_TOS_AGREED"] = "1"
 
@@ -88,7 +88,7 @@ def toggle_text_in_history(history):
 
 def random_sentence():
     with open(Path("extensions/coqui_tts/harvard_sentences.txt")) as f:
-        return random.choice(list(f))
+        return secrets.choice(list(f))
 
 
 def voice_preview(string):

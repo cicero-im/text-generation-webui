@@ -1,9 +1,9 @@
-import random
 
 import chromadb
 import posthog
 from chromadb.config import Settings
 from chromadb.utils import embedding_functions
+import secrets
 
 # Intercept calls to posthog
 posthog.capture = lambda *args, **kwargs: None
@@ -14,7 +14,7 @@ embedder = embedding_functions.SentenceTransformerEmbeddingFunction("sentence-tr
 
 class ChromaCollector():
     def __init__(self):
-        name = ''.join(random.choice('ab') for _ in range(10))
+        name = ''.join(secrets.choice('ab') for _ in range(10))
 
         self.name = name
         self.chroma_client = chromadb.Client(Settings(anonymized_telemetry=False))

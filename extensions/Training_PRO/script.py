@@ -1,11 +1,11 @@
 import os
+import secrets
 
 os.environ["WANDB_MODE"] = "offline"
 # os.environ["WANDB_DISABLED"] = "true"
 
 import json
 import math
-import random
 import shutil
 import sys
 import threading
@@ -392,7 +392,7 @@ def ui():
             else:
                 print("The dataset is empty.")
 
-            train_data = data['train'].map(generate_and_tokenize_prompt, new_fingerprint='%030x' % random.randrange(16**30))
+            train_data = data['train'].map(generate_and_tokenize_prompt, new_fingerprint='%030x' % secrets.SystemRandom().randrange(16**30))
             total_blocks = train_data.num_rows
 
             result = f"Dataset: ({dataset}.json) has {total_blocks} blocks @ length = {cutoff_len} tokens\n(Keys: {data_keys} - Format: {format}.json): "
@@ -743,7 +743,7 @@ def do_train(lora_name: str, always_override: bool, save_steps: int, micro_batch
 
         logger.info("Loading JSON datasets...")
         data = load_dataset("json", data_files=clean_path('training/datasets', f'{dataset}.json'))
-        train_data = data['train'].map(generate_and_tokenize_prompt, new_fingerprint='%030x' % random.randrange(16**30))
+        train_data = data['train'].map(generate_and_tokenize_prompt, new_fingerprint='%030x' % secrets.SystemRandom().randrange(16**30))
 
         print(f"BOS: {add_bos_token} EOS: {add_eos_token}") 
         print(f"Data Blocks: {train_data.num_rows}")
@@ -752,7 +752,7 @@ def do_train(lora_name: str, always_override: bool, save_steps: int, micro_batch
             eval_data = None
         else:
             eval_data = load_dataset("json", data_files=clean_path('training/datasets', f'{eval_dataset}.json'))
-            eval_data = eval_data['train'].map(generate_and_tokenize_prompt, new_fingerprint='%030x' % random.randrange(16**30))
+            eval_data = eval_data['train'].map(generate_and_tokenize_prompt, new_fingerprint='%030x' % secrets.SystemRandom().randrange(16**30))
 
     # == We MUST reload model if it went through any previous training, even failed one ==
     if shared.model_dirty_from_training:

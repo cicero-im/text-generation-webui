@@ -1,11 +1,11 @@
 import os
+import secrets
 
 os.environ["WANDB_MODE"] = "offline"
 # os.environ["WANDB_DISABLED"] = "true"
 
 import json
 import math
-import random
 import shutil
 import sys
 import threading
@@ -483,13 +483,13 @@ def do_train(lora_name: str, always_override: bool, q_proj_en: bool, v_proj_en: 
 
         logger.info("Loading JSON datasets")
         data = load_dataset("json", data_files=clean_path('training/datasets', f'{dataset}.json'))
-        train_data = data['train'].map(generate_and_tokenize_prompt, new_fingerprint='%030x' % random.randrange(16**30))
+        train_data = data['train'].map(generate_and_tokenize_prompt, new_fingerprint='%030x' % secrets.SystemRandom().randrange(16**30))
 
         if eval_dataset == 'None':
             eval_data = None
         else:
             eval_data = load_dataset("json", data_files=clean_path('training/datasets', f'{eval_dataset}.json'))
-            eval_data = eval_data['train'].map(generate_and_tokenize_prompt, new_fingerprint='%030x' % random.randrange(16**30))
+            eval_data = eval_data['train'].map(generate_and_tokenize_prompt, new_fingerprint='%030x' % secrets.SystemRandom().randrange(16**30))
 
     # == We MUST reload model if it went through any previous training, even failed one ==
     if shared.model_dirty_from_training:

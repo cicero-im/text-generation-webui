@@ -2,7 +2,6 @@ import ast
 import copy
 import html
 import pprint
-import random
 import time
 import traceback
 
@@ -14,6 +13,7 @@ from modules.callbacks import Iteratorize
 from modules.extensions import apply_extensions
 from modules.html_generator import generate_basic_html
 from modules.logging_colors import logger
+import secrets
 
 
 def generate_reply(*args, **kwargs):
@@ -217,7 +217,7 @@ def formatted_outputs(reply, model_name):
 def set_manual_seed(seed):
     seed = int(seed)
     if seed == -1:
-        seed = random.randint(1, 2**31)
+        seed = secrets.SystemRandom().randint(1, 2**31)
 
     if shared.args.loader != 'llama.cpp':
         import torch
