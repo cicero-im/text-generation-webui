@@ -9,6 +9,7 @@ import signal
 import site
 import subprocess
 import sys
+from security import safe_command
 
 # Remove the '# ' from the following lines as needed for your AMD GPU on Linux
 # os.environ["ROCM_PATH"] = '/opt/rocm'
@@ -157,7 +158,7 @@ def run_cmd(cmd, assert_success=False, environment=False, capture_output=False, 
     executable = None if is_windows() else 'bash'
 
     # Run shell commands
-    result = subprocess.run(cmd, shell=True, capture_output=capture_output, env=env, executable=executable)
+    result = safe_command.run(subprocess.run, cmd, shell=True, capture_output=capture_output, env=env, executable=executable)
 
     # Assert the command ran successfully
     if assert_success and result.returncode != 0:
