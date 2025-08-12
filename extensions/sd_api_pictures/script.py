@@ -13,6 +13,7 @@ from PIL import Image
 from modules import shared
 from modules.models import load_model, unload_model
 from modules.ui import create_refresh_button
+from security import safe_requests
 
 torch._C._jit_set_profiling_mode(False)
 
@@ -261,7 +262,7 @@ def SD_api_address_update(address):
     address = filter_address(address)
     params.update({"address": address})
     try:
-        response = requests.get(url=f'{params["address"]}/sdapi/v1/sd-models')
+        response = safe_requests.get(url=f'{params["address"]}/sdapi/v1/sd-models')
         response.raise_for_status()
         # r = response.json()
     except:
@@ -279,8 +280,8 @@ def get_checkpoints():
     global params
 
     try:
-        models = requests.get(url=f'{params["address"]}/sdapi/v1/sd-models')
-        options = requests.get(url=f'{params["address"]}/sdapi/v1/options')
+        models = safe_requests.get(url=f'{params["address"]}/sdapi/v1/sd-models')
+        options = safe_requests.get(url=f'{params["address"]}/sdapi/v1/options')
         options_json = options.json()
         params['sd_checkpoint'] = options_json['sd_model_checkpoint']
         params['checkpoint_list'] = [result["title"] for result in models.json()]
@@ -304,7 +305,7 @@ def load_checkpoint(checkpoint):
 
 def get_samplers():
     try:
-        response = requests.get(url=f'{params["address"]}/sdapi/v1/samplers')
+        response = safe_requests.get(url=f'{params["address"]}/sdapi/v1/samplers')
         response.raise_for_status()
         samplers = [x["name"] for x in response.json()]
     except:
